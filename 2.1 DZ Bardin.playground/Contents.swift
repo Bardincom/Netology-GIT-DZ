@@ -6,11 +6,11 @@ import UIKit
 
 class Employee {
     
-    var name: String
-    var secondName: String?
-    var surname: String
-    var age: UInt
-    var cityOfResidece: String
+    let name: String
+    let secondName: String?
+    let surname: String
+    let age: UInt
+    let cityOfResidece: String
     
     init(name: String, secondName: String?, surname: String, age: UInt, cityOfResidence: String) {
         self.name = name
@@ -22,20 +22,23 @@ class Employee {
     
     func printEmployeeResume() -> String {
         
-        var someSecondName: String
-        
-        if let secondName = secondName {
-                   someSecondName = "Second Name: \(secondName)"
-               } else {
-                   someSecondName = "Second Name: The field is't filled"
-               }
-    
-        return "Employee Profile \n Name: \(name) \n \(someSecondName) \n Surname: \(surname) \n Age: \(age) \n City of Residence: \(cityOfResidece) \n"
+        let checkSecondName = (secondName != nil) ? "Second Name: \(secondName!)" : "Second Name: The field is't filled"
+
+        return "Employee Profile \n Name: \(name) \n \(checkSecondName) \n Surname: \(surname) \n Age: \(age) \n City of Residence: \(cityOfResidece) \n"
     }
 }
 
-let newWorker = Employee(name: "Alex", secondName: nil, surname: "Bardin", age: 31, cityOfResidence: "Kyiv")
-newWorker.printEmployeeResume()
+
+
+class Developer: Employee {
+    
+    let workExperience: Int
+    
+    init(name: String, secondName: String?, surname: String, age: UInt, cityOfResidence: String, workExperience: Int) {
+        self.workExperience = workExperience
+        super.init(name: name, secondName: secondName, surname: surname, age: age, cityOfResidence: cityOfResidence)
+    }
+}
 
 
 

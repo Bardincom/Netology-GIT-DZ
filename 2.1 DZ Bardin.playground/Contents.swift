@@ -4,35 +4,39 @@ import UIKit
 
 /// Доработка текущего проекта. Создать класс Сотрудник и инициализировать его. Добавить протокол характеризующий условия которые должны быть выполенены для того чтобы мы приняли сотрудинка на работу. Создать произвольный подкласс сотрудника.
 
-var name: String = "Aleksey" // инициализирую переменную для имени сотрудника с типом String (строка).
-
-var secondName: String? = "Aleksandrovich" // инициализирую переменную для имени сотрудинка с опциональным типом String? это значит что значения может не быть.
-
-var surname = "Bardin" // данную переменную создал без явного указания Типа String, Xcode автоматически определил Тип после того как я присвоил строковое значение.
-
-var age: UInt = 30 // создаю переменную для возраста с типом UInt - данный тип разрешает ввод только целых положительных чисел.
-
-var cityOfResidece = "Kyiv" // переменная город проживания сотрудника
-
-secondName = nil // присваиваем значение nil (отсутствие данных) в отчество
-
-age = 31 // изменяем значение возраста путем присвоения нового значения
-
-print("Employee Profile") // выводим в консоль текст Анкета Сотрудника
-
-print("Name: \(name)") // выводим в консоль имя сотрудника
-
-if let secondName = secondName {          // т.к. отчетсва может не быть проверяем его на nil
-    print("Second Name: \(secondName)")  // если поле заполнено выведем доступное значение
-} else {
-    print("Second Name: The field is't filled") // в противном случае выведем сообщени о том что поле не заполнено
+class Employee {
+    
+    var name: String
+    var secondName: String?
+    var surname: String
+    var age: UInt
+    var cityOfResidece: String
+    
+    init(name: String, secondName: String?, surname: String, age: UInt, cityOfResidence: String) {
+        self.name = name
+        self.secondName = secondName
+        self.surname = surname
+        self.age = age
+        self.cityOfResidece = cityOfResidence
+    }
+    
+    func printEmployeeResume() -> String {
+        
+        var someSecondName: String
+        
+        if let secondName = secondName {
+                   someSecondName = "Second Name: \(secondName)"
+               } else {
+                   someSecondName = "Second Name: The field is't filled"
+               }
+    
+        return "Employee Profile \n Name: \(name) \n \(someSecondName) \n Surname: \(surname) \n Age: \(age) \n City of Residence: \(cityOfResidece) \n"
+    }
 }
 
-print("Surname: \(surname)") // выводим в консоль фамилию сотрудника
+let newWorker = Employee(name: "Alex", secondName: nil, surname: "Bardin", age: 31, cityOfResidence: "Kyiv")
+newWorker.printEmployeeResume()
 
-print("Age: \(age)") // выводим в консоль возраст сотрудника
-
-print("City of Residence: \(cityOfResidece)") // информация о городе проживания сотрудника
 
 
 /// Краткое резюме:

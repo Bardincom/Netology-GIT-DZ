@@ -22,25 +22,60 @@ class Employee {
     
     func printEmployeeResume() -> String {
         
+    
         let checkSecondName = (secondName != nil) ? "Second Name: \(secondName!)" : "Second Name: The field is't filled"
 
         return "Employee Profile \n Name: \(name) \n \(checkSecondName) \n Surname: \(surname) \n Age: \(age) \n City of Residence: \(cityOfResidece) \n"
     }
 }
 
+let newWorker = Employee(name: "Alex", secondName: nil, surname: "Bardin", age: 31, cityOfResidence: "Kyiv")
+newWorker.printEmployeeResume()
+
 
 
 class Developer: Employee {
     
     let workExperience: Int
+    let isLanguageSwift: Bool
     
-    init(name: String, secondName: String?, surname: String, age: UInt, cityOfResidence: String, workExperience: Int) {
+    
+    init(name: String, secondName: String?, surname: String, age: UInt, cityOfResidence: String, workExperience: Int, isLanguageSwift: Bool) {
         self.workExperience = workExperience
+        self.isLanguageSwift = isLanguageSwift
         super.init(name: name, secondName: secondName, surname: surname, age: age, cityOfResidence: cityOfResidence)
     }
 }
 
 
+protocol JuniorIOSJedy {
+    var experience: Developer {get}
+    var isHaveExperience: Bool {get}
+    
+    func decisionMaking() -> String
+
+}
+
+extension Developer: JuniorIOSJedy {
+    var experience: Developer {
+        return Developer(name: "Alex", secondName: nil, surname: "Bardin", age: 31, cityOfResidence: "Kyiv", workExperience: 2, isLanguageSwift: true)
+        
+            }
+    
+    var isHaveExperience: Bool {
+        return experience.workExperience >= 1
+    }
+    
+    func decisionMaking() -> String {
+           print("You are accepted to the position of Junior iOS")
+           return "You are accepted to the position of Junior iOS"
+       }
+}
+
+let junior = Developer(name: "Alex", secondName: nil, surname: "Bardin", age: 31, cityOfResidence: "Kyiv", workExperience: 1, isLanguageSwift: true)
+junior.experience
+junior.isHaveExperience
+junior.decisionMaking()
 
 /// Краткое резюме:
 /// Родился и вырос в маленьком промышленном городе Енакиево, Донецкая область, Украина.

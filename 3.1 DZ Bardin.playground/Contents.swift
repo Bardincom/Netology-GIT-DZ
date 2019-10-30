@@ -11,3 +11,11 @@ import UIKit
  */
 
 
+var generalOfStudentList = ["Anton", "Sergey"]
+let listOfGirls = ["Yana", "Valya", "Irina"]
+
+for (index, value) in listOfGirls.enumerated() { // обходим циклом массив содержищий имена девочек
+  generalOfStudentList.insert(value, at: index)  // и каждый элемент массива присваиваем другому массиву содержищему общий список студентов
+}
+
+print("Общий список студентов:\n \(generalOfStudentList)")

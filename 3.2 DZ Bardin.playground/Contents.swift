@@ -32,7 +32,7 @@ myBelovedWife = intermediateTuple // присваивают второму ко�
 
 print("\t Итоговый результат присвоений:")
 print("myFavorite - Фильм: \(myFavorite.film), Число: \(myFavorite.number), Блюдо: \(myFavorite.dish)")
-print("myBelovedWife - Фильм: \(myBelovedWife.film), Число: \(myBelovedWife.number), Блюдо: \(myBelovedWife.dish)")
+print("myBelovedWife - Фильм: \(myBelovedWife.film), Число: \(myBelovedWife.number), Блюдо: \(myBelovedWife.dish)\n")
 
 
 // Условие №5
@@ -40,3 +40,44 @@ let spesialNumbers = (myFavorite.number, myBelovedWife.number, myFavorite.number
 spesialNumbers.0
 spesialNumbers.1
 spesialNumbers.2
+
+//MARK: Задача №2
+/*
+ Задача 2
+ Вы продолжаете разрабатывать информационное приложение. Сейчас вам необходимо создать больше людей в вашем приложении (например, 5). И удалить людей, чье любимое число больше 13.
+
+ Алгоритм выполнения
+ 1. Создайте еще как минимум трех человек с информацией.
+ 2. Сложите все эти объекты в массив (пусть у двух любимое число будет больше 13, а у других трех меньше).
+ 3. Выберите подходящий для задачи цикл и оператор управления выходом из этого цикла.
+ 4. Удалите из массива неудовлетворяющие условию элементы.
+ */
+
+var catFavorine = (film: "Discovery: Cats", number: 12, dish: "Fish Cake")
+var dogFavorine = (film: "Discovery:Dogs", number: 5, dish: "Bone")
+var friendFavorite = (film: "What Men Talk About", number: 7, dish: "Spaghetti")
+
+var generalPreferences: [(film: String, number: Int, dish: String)] = []
+
+// заполняю массив данными
+generalPreferences.append(myFavorite)
+generalPreferences.append(myBelovedWife)
+generalPreferences.append(catFavorine)
+generalPreferences.append(dogFavorine)
+generalPreferences.append(friendFavorite)
+
+print("До процедуры удаления: \(generalPreferences)\n")
+
+var intermediateArray: [(film: String, number: Int, dish: String)] = []
+
+for item in generalPreferences {
+ 
+  if item.number > 13 { // если значение будет больше 13
+    continue // пропускаем эти числа
+  }
+  
+  intermediateArray.append(item) // записываем значения которые меньше 13 в промежуточный массив
+}
+
+generalPreferences = intermediateArray // присваиваю главному массиву значения промежуточного массива
+print("После удаления: \(generalPreferences)")

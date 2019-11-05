@@ -101,7 +101,7 @@ var chessmans: Chessman = ["Queen": (alpha: "H", num: 4), // создаю сло
                            "Pown": (nil),
                            "Bishop": (alpha: "A", num: 3)]
 
-// обращаюсь по ключу словаря
+// обращаюсь по ключу словаря и делаю опциальное присвоение для того чтобы можно было распечатать развернутые значения
 if let info = chessmans["Queen"], let status = info {
     print("Фигура расположена в клетке \(status.alpha)\(status.num)")
   } else {
@@ -109,6 +109,16 @@ if let info = chessmans["Queen"], let status = info {
 }
 
 
+//MARK: Задание 4(*)
+//Вам необходимо доработать программу из Задания 3 таким образом, чтобы она автоматически анализировала не одну переданную ей фигуру, а все фигуры, хранящиеся в переменной Chessmans.
 
+// анализирую все фигуры
+for (name, info) in chessmans {
+  if let statusChessman = info.self {
+    print("фигура \(name) расположена на \(statusChessman.alpha) \(statusChessman.num)")
+  } else {
+    print("фигура \(name) отсутствует на игровом поле")
+  }
+}
 
 

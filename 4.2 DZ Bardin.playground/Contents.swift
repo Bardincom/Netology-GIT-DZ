@@ -40,8 +40,24 @@ dataProcessing(weight: 14, distance: 24000, calculation: resaultVolovetc)
 
 // алгоритмы в сокращенном виде
 let algorithmSheldonRecovery: (Double, Double) -> Double = {($0 + $1) * 3.14}
-let algoritmVolovetcRecovery: (Double, Double) -> Double = {($1 * 100 * 3.14) / $0}
+let algorithmVolovetcRecovery: (Double, Double) -> Double = {($1 * 100 * 3.14) / $0}
+
+// еще можно создать typealias, в который мы передали тип замыкания, это позволило нам еще больше сократить наш код
+typealias ClouserType = (Double, Double) -> Double
+let algorithmPenny: ClouserType = {($0 + $1)}
+
 
 // вызываю функцию
 dataProcessing(weight: 14, distance: 24000, calculation: algorithmSheldonRecovery)
-dataProcessing(weight: 14, distance: 24000, calculation: algoritmVolovetcRecovery)
+dataProcessing(weight: 14, distance: 24000, calculation: algorithmVolovetcRecovery)
+dataProcessing(weight: 14, distance: 24000, calculation: algorithmPenny)
+
+
+//MARK: Задача 3(*)
+///Пока вы добирались до села с компьютером, вам пришла в голову мысль своего алгоритма. Вы решили использовать свою функцию для проверки гипотезы и стали набирать алгоритм прямо в ней (реализация Замыкания вместо параметра).
+///Алгоритм выполнения
+///Вызвать функцию из задания 1, определив ей Замыкание самостоятельно (не передавая).
+///Объяснить, куда и почему исчезло ключевое слово ('param' - в примере) для параметра.
+
+dataProcessing(weight: 14, distance: 24000) {($0 + $1) * 2.771}
+/// calculation - это по сути константа и ей присвоена функция которая должна вернуть тип Double, разворачивая ее клавишей Return на клавиатуре мы открываем тело функции {...} в которой и происходит нужное действие, в нашем случае некая математическая операция. В своем примере я записал в сокрщенном синтаксисе реализацию данного замыкания, хотя можно рассписать ее в полном виде как было сделано в задаче №1

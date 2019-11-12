@@ -16,7 +16,7 @@ import UIKit
 
 //создаю функция входящие значения которой будут вес спутника и расстояние полета - эти данные будут использоваться в следующем входящем параметре замыкания для расчета который будут передавать ученые.
 func dataProcessing (weight: Double, distance: Double, calculation fuel: (Double, Double) -> Double) {
-  print("Результат расчета сделанный ученым: \(fuel(weight, distance))")
+  print("Результат расчета сделанный ученым: \(fuel(weight, distance))\n")
 }
 
 // алгоритмы расчетов ученых, поступают два параметра типа Double, замыкание должно вернуть результат в Double
@@ -33,3 +33,15 @@ dataProcessing(weight: 14, distance: 24000, calculation: resaultSheldon)
 dataProcessing(weight: 14, distance: 24000, calculation: resaultVolovetc)
 
 
+//MARK: Задача №2
+///В вашем конструкторском бюро случилось ЧП и все компьютеры вышли из строя, но последние алгоритмы вы помните. Вы намерены добраться до ближайшего компьютера в соседнем селе и восстановить из своей памяти нужные данные. Ваша задача запомнить максимально краткую форму записи алгоритмов, чтобы все не смешалось в голове.
+///Алгоритм выполнения
+///Представить задание 1 в сокращенном виде.
+
+// алгоритмы в сокращенном виде
+let algorithmSheldonRecovery: (Double, Double) -> Double = {($0 + $1) * 3.14}
+let algoritmVolovetcRecovery: (Double, Double) -> Double = {($1 * 100 * 3.14) / $0}
+
+// вызываю функцию
+dataProcessing(weight: 14, distance: 24000, calculation: algorithmSheldonRecovery)
+dataProcessing(weight: 14, distance: 24000, calculation: algoritmVolovetcRecovery)

@@ -54,7 +54,7 @@ class TVSet { //класс телефизор
     self.isOn = isOn
     self.selectedChannel = selectedChannal
   }
-  
+ 
 //  функция показывае что сейчас на экране телевизора
   func showWhatsOnTv() {
     
@@ -64,11 +64,12 @@ class TVSet { //класс телефизор
     
     print("Сейчас выбран канал \(selectedChannel!.rawValue), на экране \"\(selectedChannel!.program)\".") // я использую тут явное извлечение, т.к. выше мы прошли проверку на nil
   }
-  
 }
 
-let fistTV = TVSet(firm: "Sony", model: "KD45", isOn: true, selectedChannal: nil)
+// Проверка первого телевизора
+let fistTV = TVSet(firm: "Sony", model: "KD45", isOn: false, selectedChannal: nil)
 print("\t \"Первое поколение телевизоров \(fistTV.firm) \(fistTV.model)\"")
+fistTV.isOn = true
 fistTV.selectedChannel?.program
 fistTV.showWhatsOnTv()
 fistTV.selectedChannel = .travelChannel
@@ -117,23 +118,36 @@ struct Settings {
     print("\(volume.soundInfo)")
   }
   
-  func switchTheScreen(isColor: Bool) { // метод позволяющий переключится на чернобелый ретро режим
+  func switchTheScreen(isColor: Bool) { // метод позволяющий переключится на чернобелый или цветной режим
     guard isColor else { print("Черно-белый ретро рижим включен"); return}
-    print("Вы используете цветной режим")
+    print("Цветной режим включен")
   }
 }
 
-class TVSetNextGen: TVSet { // новое поколение телефизора, наследник класса TVSet c интегрированными настройками
-  let settings = Settings()
+// новое поколение телевизора, наследник класса TVSet c интегрированными настройками
+class TVSetNextGen: TVSet {
+  private let settings = Settings() // интегрирую настройки, и закрываю для вызова извне - будет доступно только в текущем классе
+  
+  func useSoundSettings(range: Settings.VolumeRange) { // метод для изменнения громкости
+    guard isOn else { print("Teлевизор выключен"); return}
+    settings.changeVolume(volume: range)
+  }
+  
+  func useColorSettings(isColor: Bool) { // метод для изменнения цвета
+    guard isOn else { print("Teлевизор выключен"); return}
+    settings.switchTheScreen(isColor: isColor)
+  }
 }
 
+// Проверка второго телевизора
 let secondTV = TVSetNextGen(firm: "Sunsung", model: "UE65", isOn: false, selectedChannal: nil)
 print("\t \"Телевизор второго поколения \(secondTV.firm) \(secondTV.model) \"")
 secondTV.isOn = true
-secondTV.settings.switchTheScreen(isColor: false)
+secondTV.useColorSettings(isColor: true)
+secondTV.showWhatsOnTv()
+secondTV.useSoundSettings(range: .nine)
 secondTV.selectedChannel = .disneyChannel
 secondTV.showWhatsOnTv()
-secondTV.settings.changeVolume(volume: .seven)
 
 
 //MARK: Задача №3
@@ -147,7 +161,7 @@ secondTV.settings.changeVolume(volume: .seven)
  Вызовите метод и покажите, что сейчас по телеку.
  */
 
-enum Videotapes: String { //видео касеты
+enum Videotapes: String { //видео касеты (дополнение к заданию)
   case carton
   case anime
   case action
@@ -163,27 +177,54 @@ enum Videotapes: String { //видео касеты
       case .horror: return "The Shining"
     }
   }
-  
 }
 
+// Новый класс телевизора с возможностью подключения видеомагнитофона или выбора каналов передач
 class TVNeo: TVSetNextGen {
   enum TypeOfConnection {
-    case TVChannals (TVChannals?)
-    case tvBox (Videotapes)
+    case tvChannals (TVChannals?)
+    case tvBox (Videotapes?)
+    
+    var tv: String {
+      switch self {
+        case .tvChannals(let .some(value)): return "Сейчас включен канал \(value.rawValue) \"\(value.program)\""
+        case .tvBox(let .some(value)): return "Сейчас включен видеомагнитофон с фильмом категории \(value.rawValue) \"\(value.inside)\""
+        case .tvChannals(.none): return "Канал не выбран"
+        case .tvBox(.none): return "Вставьте касету"
+      }
+    }
+    
   }
   
   var isOnTVBox: TypeOfConnection? // может быть еще не подкючено
   
-  init(firm: String, model: String, isOn: Bool, selectedChannal: TVChannals?, isOnTVBox: TypeOfConnection?) {
+  init(firm: String, model: String, isOn: Bool, isOnTVBox: TypeOfConnection?) { // убрал из инициализации отдельный выбор канала
     self.isOnTVBox = isOnTVBox
-    super.init(firm: firm, model: model, isOn: isOn, selectedChannal: selectedChannal)
+    super.init(firm: firm, model: model, isOn: isOn, selectedChannal: nil)
   }
   
+  override func showWhatsOnTv() {
+    guard isOn else { print("Teлевизор выключен"); return}
+    guard let _ = isOnTVBox else {print("Необходимо выбрать канал или подключить видеомагнитофон"); return}
+    print("\(isOnTVBox!.tv)")
+  }
 }
 
-let thirdTV = TVNeo(firm: "LG", model: "NG75", isOn: true, selectedChannal: nil, isOnTVBox: .TVChannals(nil))
-print("\t \"Телевизор третьего поколения \(thirdTV.firm) \(thirdTV.model) \"")
-
+// Проверка третьего телевизора
+let thirdTV = TVNeo(firm: "LG", model: "NG75", isOn: false, isOnTVBox: nil)
+print("\t \"Телевизор третьего поколения \(thirdTV.firm) \(thirdTV.model)\"")
+thirdTV.isOn = true
+thirdTV.showWhatsOnTv()
+thirdTV.isOnTVBox = .tvChannals(.animalPlanet)
+thirdTV.showWhatsOnTv()
+thirdTV.isOnTVBox = nil
+thirdTV.showWhatsOnTv()
+thirdTV.isOnTVBox = .tvBox(nil)
 thirdTV.showWhatsOnTv()
 thirdTV.isOnTVBox = .tvBox(.action)
 thirdTV.showWhatsOnTv()
+
+
+
+
+

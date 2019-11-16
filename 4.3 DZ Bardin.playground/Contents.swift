@@ -128,7 +128,7 @@ class TVSetNextGen: TVSet { // новое поколение телефизор�
 }
 
 let secondTV = TVSetNextGen(firm: "Sunsung", model: "UE65", isOn: false, selectedChannal: nil)
-print("\t \n \"Телевизор второго поколения \(secondTV.firm) \(secondTV.model) \"")
+print("\t \"Телевизор второго поколения \(secondTV.firm) \(secondTV.model) \"")
 secondTV.isOn = true
 secondTV.settings.switchTheScreen(isColor: false)
 secondTV.selectedChannel = .disneyChannel
@@ -136,4 +136,54 @@ secondTV.showWhatsOnTv()
 secondTV.settings.changeVolume(volume: .seven)
 
 
+//MARK: Задача №3
+/*
+ Порог новой эры пройден. Теперь не только есть радио волна, но и видео магнитофоны. Эту технику подключают проводами к телевизору и смотрят в записи свои любимые фильмы. Вам, как ведущему инженеру, срочно нужно адаптировать продукт вашей компании, потому как спрос на устаревший вариант резко пошел вниз.
+ Алгоритм выполнения
+ Создайте перечисление со связанными значениями с двумя кейсами:
+ телеканал;
+ подключение по входящему видео порту.
+ Интегрируйте эту опцию в Телевизор (используйте наследование).
+ Вызовите метод и покажите, что сейчас по телеку.
+ */
 
+enum Videotapes: String { //видео касеты
+  case carton
+  case anime
+  case action
+  case comedy
+  case horror
+  
+  var inside: String {
+    switch self {
+      case .carton: return "Cold Heart 2"
+      case .anime: return "Weathering with You"
+      case .action: return "The Terminator"
+      case .comedy: return "Alone at home"
+      case .horror: return "The Shining"
+    }
+  }
+  
+}
+
+class TVNeo: TVSetNextGen {
+  enum TypeOfConnection {
+    case TVChannals (TVChannals?)
+    case tvBox (Videotapes)
+  }
+  
+  var isOnTVBox: TypeOfConnection? // может быть еще не подкючено
+  
+  init(firm: String, model: String, isOn: Bool, selectedChannal: TVChannals?, isOnTVBox: TypeOfConnection?) {
+    self.isOnTVBox = isOnTVBox
+    super.init(firm: firm, model: model, isOn: isOn, selectedChannal: selectedChannal)
+  }
+  
+}
+
+let thirdTV = TVNeo(firm: "LG", model: "NG75", isOn: true, selectedChannal: nil, isOnTVBox: .TVChannals(nil))
+print("\t \"Телевизор третьего поколения \(thirdTV.firm) \(thirdTV.model) \"")
+
+thirdTV.showWhatsOnTv()
+thirdTV.isOnTVBox = .tvBox(.action)
+thirdTV.showWhatsOnTv()

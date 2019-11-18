@@ -43,14 +43,13 @@ class TVSet { //класс телефизор
   }
   
 // задаю свойства телевизора
-  let (firm, model): (String, String)
+  let firmAndModel: (firm: String, model: String)
   var isOn: Bool
   var selectedChannel: TVChannals? //может ничего не показывать
   
 //  инициализирую значения полей класса Телевизор
-  init(firm: String, model: String, isOn: Bool, selectedChannal: TVChannals?) {
-    self.firm = firm
-    self.model = model
+  init(firmAndModel: (String, String), isOn: Bool, selectedChannal: TVChannals?) {
+    self.firmAndModel = firmAndModel
     self.isOn = isOn
     self.selectedChannel = selectedChannal
   }
@@ -60,15 +59,15 @@ class TVSet { //класс телефизор
     
     guard isOn else { print("Teлевизор выключен"); return} //проверяю включен ли телевизор, если включен идем дальше впротивном случае выходим из программы и получаем ответ о том что телевизо выклчючен.
     
-    guard let _ = selectedChannel else {print("Идет поиск канала"); return } //если канал не выбран получаем сообщение и выходим из программы, использую сдесь проверку на nil
+    guard let selectedChannel = selectedChannel else {print("Идет поиск канала"); return } //если канал не выбран получаем сообщение и выходим из программы, использую сдесь проверку на nil
     
-    print("Сейчас выбран канал \(selectedChannel!.rawValue), на экране \"\(selectedChannel!.program)\".") // я использую тут явное извлечение, т.к. выше мы прошли проверку на nil
+    print("Сейчас выбран канал \(selectedChannel.rawValue), на экране \"\(selectedChannel.program)\".") // используем полученный после проверки извлеченный параметр для дальнейшей работы
   }
 }
 
-// Проверка первого телевизора
-let fistTV = TVSet(firm: "Sony", model: "KD45", isOn: false, selectedChannal: nil)
-print("\t \"Первое поколение телевизоров \(fistTV.firm) \(fistTV.model)\"")
+// Проверка первого телевизора firm: "Sony", model: "KD45",
+let fistTV = TVSet(firmAndModel: ("Sony", "KD45"), isOn: false, selectedChannal: nil)
+print("\t \"Первое поколение телевизоров \(fistTV.firmAndModel.firm) \(fistTV.firmAndModel.model)\"")
 fistTV.isOn = true
 fistTV.selectedChannel?.program
 fistTV.showWhatsOnTv()
@@ -140,8 +139,8 @@ class TVSetNextGen: TVSet {
 }
 
 // Проверка второго телевизора
-let secondTV = TVSetNextGen(firm: "Sunsung", model: "UE65", isOn: false, selectedChannal: nil)
-print("\t \"Телевизор второго поколения \(secondTV.firm) \(secondTV.model) \"")
+let secondTV = TVSetNextGen(firmAndModel: ("Sunsung", "UE65"), isOn: false, selectedChannal: nil)
+print("\t \"Телевизор второго поколения \(secondTV.firmAndModel.firm) \(secondTV.firmAndModel.model) \"")
 secondTV.isOn = true
 secondTV.useColorSettings(isColor: true)
 secondTV.showWhatsOnTv()
@@ -198,21 +197,21 @@ class TVNeo: TVSetNextGen {
   
   var isOnTVBox: TypeOfConnection? // может быть еще не подкючено
   
-  init(firm: String, model: String, isOn: Bool, isOnTVBox: TypeOfConnection?) { // убрал из инициализации отдельный выбор канала
+  init(firmAndModel: (String, String), isOn: Bool, isOnTVBox: TypeOfConnection?) { // убрал из инициализации отдельный выбор канала
     self.isOnTVBox = isOnTVBox
-    super.init(firm: firm, model: model, isOn: isOn, selectedChannal: nil)
+    super.init(firmAndModel: firmAndModel, isOn: isOn, selectedChannal: nil)
   }
   
   override func showWhatsOnTv() {
     guard isOn else { print("Teлевизор выключен"); return}
-    guard let _ = isOnTVBox else {print("Необходимо выбрать канал или подключить видеомагнитофон"); return}
-    print("\(isOnTVBox!.tv)")
+    guard let isOnTVBox = isOnTVBox else {print("Необходимо выбрать канал или подключить видеомагнитофон"); return}
+    print("\(isOnTVBox.tv)")
   }
 }
 
 // Проверка третьего телевизора
-let thirdTV = TVNeo(firm: "LG", model: "NG75", isOn: false, isOnTVBox: nil)
-print("\t \"Телевизор третьего поколения \(thirdTV.firm) \(thirdTV.model)\"")
+let thirdTV = TVNeo(firmAndModel: ("LG", "NG75"), isOn: false, isOnTVBox: nil)
+print("\t \"Телевизор третьего поколения \(thirdTV.firmAndModel.firm) \(thirdTV.firmAndModel.model)\"")
 thirdTV.isOn = true
 thirdTV.showWhatsOnTv()
 thirdTV.isOnTVBox = .tvChannals(.animalPlanet)

@@ -13,7 +13,7 @@ import UIKit
  */
 
 struct Track {
-  var name: String
+  var nameTrack: String
   var artist: String
   var duration: Float
   var country: String
@@ -21,17 +21,19 @@ struct Track {
 
 class Category {
   let nameCategory: String
-  lazy var trackList: [Track] = [] // до первого обращения не активно
+  
+  lazy var trackList: [Track] = []
+
   var numbersOfTrack: Int { // вычисляем кол. треков в категории
     trackList.count
   }
   
   var totalDuration: Float { // вычисляем общую продолжительность воспроизводимых треков
-    var allDur: Float = 0.0
+    var durations: Float = 0.0
     for item in trackList {
-      allDur += item.duration
+      durations += item.duration
     }
-    return allDur
+    return durations
   }
 
   init(nameCategory: String) {
@@ -42,18 +44,75 @@ class Category {
     trackList.append(track)
   }
   func removeTrack(numder: Int) { // удаляем треки
-    trackList.remove(at: (numder - 1)) // для того чтобы пользователь мог в привычной форме удалять треки по номеру нахождения в списке добавлю формулу: значение минус 1 будет индекс под которым находится запрашиваемый трек
+//    numberDrop = numder
+    trackList.remove(at: numder - 1) // для того чтобы пользователь мог в привычной форме удалять треки по номеру нахождения в списке добавлю формулу: значение минус 1 будет индекс под которым находится запрашиваемый трек
   }
 }
 
 // Проверка
-var cat = Category(nameCategory: "Rock")
-cat.addNew(track: Track(name: "Воздух", artist: "Наутилус", duration: 5.03, country: "RU"))
-cat.addNew(track: Track(name: "Титаник", artist: "Наутилус", duration: 5.16, country: "RU"))
-cat.addNew(track: Track(name: "Тутанхамон", artist: "Наутилус", duration: 4.51, country: "RU"))
-cat.totalDuration
-cat.removeTrack(numder: 2)
-print(cat.trackList)
-cat.totalDuration
+var categoryRock = Category(nameCategory: "Rock")
+categoryRock.trackList
+categoryRock.addNew(track: Track(nameTrack: "Воздух", artist: "Наутилус", duration: 5.03, country: "RU"))
+categoryRock.addNew(track: Track(nameTrack: "Титаник", artist: "Наутилус", duration: 5.16, country: "RU"))
+categoryRock.addNew(track: Track(nameTrack: "Тутанхамон", artist: "Наутилус", duration: 4.51, country: "RU"))
+categoryRock.totalDuration
+categoryRock.removeTrack(numder: 1)
 
+//MARK: Задача №2
+///Доработайте свою библиотеку так, чтобы в ней было несколько категорий
+///Алгоритм выполнения
+///Создайте класс библиотеки. Этот класс будет аналогичен классу категории, только хранить он должен список категорий
+
+class Library {
+  var nameLibrary: String
+  var categoryList: [Category] = []
+  var numbersOfCategoru: Int {
+    categoryList.count
+  }
+  
+  var durationLibrary: Float {
+    var duration: Float = 0
+    
+    for item in categoryList {
+      duration += item.totalDuration
+    }
+    return duration
+  }
+  
+  init(name: String) {
+    self.nameLibrary = name
+  }
+  
+  func addNew(category: Category) {
+    categoryList.append(category)
+  }
+  
+  func removeCategory(number: Int) {
+    categoryList.remove(at: number - 1)
+  }
+  
+  func displayAllTracks() {
+    for category in categoryList { // обходим по массиву категория
+      print("Категрия: \(category.nameCategory), продолжительность звучания: \(category.totalDuration)") // выводим в консоль названия категория
+      for tracks in category.trackList { // внутри категорий обходим трек листы
+        print(tracks) // выводим название треков для каждой их категорий
+      }
+    }
+    print("Общая продолжительность звучания библиотеки: \"\(nameLibrary)\"  \(durationLibrary) мин.")
+//    categoryList.forEach { print($0.nameCategory) // альтернативный код
+//      $0.trackList.forEach { print($0)}
+//    }
+  }
+}
+
+
+var categoryLirics = Category(nameCategory: "Lirics")
+categoryLirics.addNew(track: Track(nameTrack: "Shape of My Heart", artist: "Sting", duration: 4.38, country: "GBR"))
+categoryLirics.addNew(track: Track(nameTrack: "Gitan", artist: "Garou", duration: 4.07, country: "FR"))
+
+var newLibrary = Library(name: "Моя сборка хитов")
+newLibrary.addNew(category: categoryRock)
+newLibrary.addNew(category: categoryLirics)
+newLibrary.numbersOfCategoru
+newLibrary.displayAllTracks()
 

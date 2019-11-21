@@ -33,6 +33,7 @@ class Category {
     for item in trackList {
       durations += item.duration
     }
+    
     return durations
   }
 
@@ -44,19 +45,20 @@ class Category {
     trackList.append(track)
   }
   func removeTrack(numder: Int) { // удаляем треки
-//    numberDrop = numder
     trackList.remove(at: numder - 1) // для того чтобы пользователь мог в привычной форме удалять треки по номеру нахождения в списке добавлю формулу: значение минус 1 будет индекс под которым находится запрашиваемый трек
   }
 }
 
 // Проверка
 var categoryRock = Category(nameCategory: "Rock")
-categoryRock.trackList
+print("До добавления Треков: \(categoryRock.trackList) \n")
 categoryRock.addNew(track: Track(nameTrack: "Титаник", artist: "Наутилус", duration: 5.16, country: "RU"))
 categoryRock.addNew(track: Track(nameTrack: "Воздух", artist: "Наутилус", duration: 5.03, country: "RU"))
 categoryRock.addNew(track: Track(nameTrack: "Тутанхамон", artist: "Наутилус", duration: 4.51, country: "RU"))
+print("После добавления Треков: \(categoryRock.trackList) \n")
 categoryRock.totalDuration
 categoryRock.removeTrack(numder: 1)
+print("После удаления Треков: \(categoryRock.trackList) \n")
 
 //MARK: Задача №2
 ///Доработайте свою библиотеку так, чтобы в ней было несколько категорий
@@ -70,7 +72,7 @@ class Library {
     categoryList.count
   }
   
-  var durationLibrary: Float { // вычисляем общю продолжительность всей библиотеки
+  var durationLibrary: Float { // вычисляем общyю продолжительность всей библиотеки
     var duration: Float = 0
     
     for item in categoryList {
@@ -94,23 +96,17 @@ class Library {
   
   func displayAllTracks() { // выводим в консоль треки разбитые по категориям
     for category in categoryList { // обходим по массиву категория
-      print("\t Категрия: \(category.nameCategory), продолжительность звучания: \(category.totalDuration)") // выводим в консоль названия категория
+      print("\t Категрия: \(category.nameCategory), продолжительность звучания: \(category.totalDuration) мин") // выводим в консоль названия категория
       for tracks in category.trackList { // внутри категорий обходим трек листы
         print(tracks) // выводим название треков для каждой их категорий
       }
     }
-    print("Общая продолжительность звучания библиотеки: \"\(nameLibrary)\"  \(durationLibrary) мин.")
-    
-//    categoryList.forEach { print($0.nameCategory) // альтернативный код
-//      $0.trackList.forEach { print($0)}
-//    }
+    print("Общая продолжительность звучания библиотеки: \"\(nameLibrary)\"  \(durationLibrary) мин")
   }
   
   func transferTrack(from categoryOne: Category, to categoryTwo: Category, track number: Int) {
-    var indexArray = 0
-    indexArray = number - 1
-    print("Запрашиваемый трек для переноса: \(categoryOne.trackList[indexArray])")
-    categoryTwo.addNew(track: categoryOne.trackList[indexArray]) // переношу запрашиваемый трек в другую категорию
+    print("Запрашиваемый трек для переноса: \(categoryOne.trackList[number - 1])")
+    categoryTwo.addNew(track: categoryOne.trackList[number - 1]) // переношу запрашиваемый трек в другую категорию
     categoryOne.removeTrack(numder: number) // удаляю из первой категории перенесенный трек
   }
 

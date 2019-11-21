@@ -52,8 +52,8 @@ class Category {
 // Проверка
 var categoryRock = Category(nameCategory: "Rock")
 categoryRock.trackList
-categoryRock.addNew(track: Track(nameTrack: "Воздух", artist: "Наутилус", duration: 5.03, country: "RU"))
 categoryRock.addNew(track: Track(nameTrack: "Титаник", artist: "Наутилус", duration: 5.16, country: "RU"))
+categoryRock.addNew(track: Track(nameTrack: "Воздух", artist: "Наутилус", duration: 5.03, country: "RU"))
 categoryRock.addNew(track: Track(nameTrack: "Тутанхамон", artist: "Наутилус", duration: 4.51, country: "RU"))
 categoryRock.totalDuration
 categoryRock.removeTrack(numder: 1)
@@ -65,17 +65,18 @@ categoryRock.removeTrack(numder: 1)
 
 class Library {
   var nameLibrary: String
-  var categoryList: [Category] = []
-  var numbersOfCategoru: Int {
+  lazy var categoryList: [Category] = []
+  var numbersOfCategoru: Int { // вычисляем кол. категорий
     categoryList.count
   }
   
-  var durationLibrary: Float {
+  var durationLibrary: Float { // вычисляем общю продолжительность всей библиотеки
     var duration: Float = 0
     
     for item in categoryList {
       duration += item.totalDuration
     }
+    
     return duration
   }
   
@@ -91,18 +92,28 @@ class Library {
     categoryList.remove(at: number - 1)
   }
   
-  func displayAllTracks() {
+  func displayAllTracks() { // выводим в консоль треки разбитые по категориям
     for category in categoryList { // обходим по массиву категория
-      print("Категрия: \(category.nameCategory), продолжительность звучания: \(category.totalDuration)") // выводим в консоль названия категория
+      print("\t Категрия: \(category.nameCategory), продолжительность звучания: \(category.totalDuration)") // выводим в консоль названия категория
       for tracks in category.trackList { // внутри категорий обходим трек листы
         print(tracks) // выводим название треков для каждой их категорий
       }
     }
     print("Общая продолжительность звучания библиотеки: \"\(nameLibrary)\"  \(durationLibrary) мин.")
+    
 //    categoryList.forEach { print($0.nameCategory) // альтернативный код
 //      $0.trackList.forEach { print($0)}
 //    }
   }
+  
+  func transferTrack(from categoryOne: Category, to categoryTwo: Category, track number: Int) {
+    var indexArray = 0
+    indexArray = number - 1
+    print("Запрашиваемый трек для переноса: \(categoryOne.trackList[indexArray])")
+    categoryTwo.addNew(track: categoryOne.trackList[indexArray]) // переношу запрашиваемый трек в другую категорию
+    categoryOne.removeTrack(numder: number) // удаляю из первой категории перенесенный трек
+  }
+
 }
 
 
@@ -116,3 +127,10 @@ newLibrary.addNew(category: categoryLirics)
 newLibrary.numbersOfCategoru
 newLibrary.displayAllTracks()
 
+//MARK: Задача 3 (*)
+//Преобразуйте классы так, чтобы в пределах вашей библиотеки можно было обмениваться треками между категориями
+
+/// Решение данной задачи реализовано в методе transferTrack - задачи №2
+print("\n")
+newLibrary.transferTrack(from: categoryRock, to: categoryLirics, track: 1)
+newLibrary.displayAllTracks()

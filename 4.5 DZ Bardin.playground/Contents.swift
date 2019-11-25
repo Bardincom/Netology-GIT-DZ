@@ -13,9 +13,9 @@ import UIKit
 
 struct Track {
   var name: String
-  var artist: String
+  var artist: String = "Artist Name"
   var duration: Float
-  var country: String
+  var country: String = "Artist Country"
 }
 
 class Artist {
@@ -24,6 +24,8 @@ class Artist {
     case Rock
     case Shanson
   }
+  //  массив песен куда добавляются все написанные песни Артиста
+  var trackList: [Track] = []
   
   // добавляю наблюдателя свойст для отслеживания изменения имени артиста на псевдоним
   final var nameArtist: String {
@@ -31,7 +33,7 @@ class Artist {
       print("CNN: Исполнитель под именем \(nameArtist) принял решение взять себе новый псевдоним \(newValue)")
     }
     didSet {
-      print("CNN: Все старые лейблы с его прежним именем \(oldValue) вскоpе будут перевыпущены под новым именем \(nameArtist)")
+      print("CNN: Все старые лейблы с его прежним именем \(oldValue) теперь выпускаются под новым именем \(nameArtist)")
     }
   }
   
@@ -57,14 +59,25 @@ class Artist {
     self.genreOfMusic = genreOfMusic
   }
   
-  func write(track: Track) {
+  //  метод автоматизирует добавление полной информации о Треке (Дополнение)
+  final func addTo(track: Track, nameArtist: String, country: String) -> Track {
+    var trackInfo = track
+    trackInfo.artist = nameArtist
+    trackInfo.country = country
+    trackList.append(trackInfo)
+    return trackInfo
+  }
+  
+  func write(track: Track) -> Track {
     print("Я \(nameArtist) написал песню \"\(track.name)\"")
+    return addTo(track: track, nameArtist: nameArtist, country: country)
   }
   
   func perform(track: Track) {
     print("Я \(nameArtist) исполнил песню \"\(track.name)\"")
   }
 }
+
 
 // Создаю подклассы супер класса Артист
 //MARK: RockSinger class
@@ -77,11 +90,12 @@ final class RockSinger: Artist {
   
   // уникальное свойство Количество подписчиков (Задание №2) со встроенным наблюдателем свойств
   var numberOfSubscribers: Int {
-    willSet {
-      print("\(nameArtist) Супер Рок-Star у него \(newValue) подписчиков")
-    }
     didSet {
       numberOfSubscribers >= 1_000_000 ? (instagramStar = true) : (instagramStar = false)
+      guard numberOfSubscribers >= 1_000_000 else {
+        return
+      }
+      print("\(nameArtist) Инстаграм звезда")
     }
   }
   
@@ -102,8 +116,9 @@ final class RockSinger: Artist {
   }
   
   // переопределяю метод Написать песню
-  override func write(track: Track) {
+  override func write(track: Track) -> Track {
     print("Я \(nameArtist), кумир молодежи написал хитяру \"\(track.name)\"")
+    return addTo(track: track, nameArtist: nameArtist, country: country)
   }
   
   // переопределяю метод Исполнить песню
@@ -117,24 +132,26 @@ final class RockSinger: Artist {
 final class PopSinger: Artist {
   // уникальнное свойство общее количество полученных цветов (Задание №2)
   var numberOfFlowers: Int = 0
-
+  
   // уникальнное свойство исполнить песню на бис (Задание №2)
   func singAnEncore(track: Track) {
     print("Песня на бис: \"\(track.name)\"")
     numberOfFlowers += 120
   }
   
-  override func write(track: Track) {
-     print("Я ваш покорный слуга \(nameArtist), мои дорогие поклонники и поклонницы написал для вас песню \"\(track.name)\"")
-   }
-   
-   override func perform(track: Track) {
-     print("Я ваш покорный слуга \(nameArtist) исполнил для Вас эту песню \"\(track.name)\"")
-   }
+  override func write(track: Track) -> Track {
+    print("Я ваш покорный слуга \(nameArtist), мои дорогие поклонники и поклонницы написал для вас песню \"\(track.name)\"")
+    return addTo(track: track, nameArtist: nameArtist, country: country)
+  }
+  
+  override func perform(track: Track) {
+    print("Я ваш покорный слуга \(nameArtist) исполнил для Вас эту песню \"\(track.name)\"")
+  }
 }
 
 //MARK: ShansonSinger class
 // Подкласс Шансон исполнитель
+
 final class ShansonSinger: Artist {
   // уникальное свойство имеет черный БМВ (Задание №2)
   var isBlackBMW: Bool
@@ -154,13 +171,14 @@ final class ShansonSinger: Artist {
     print("\(nameArtist) выступил с концертом в \(inTheHall)")
   }
   
-  override func write(track: Track) {
-     print("Вечер в хату, добрые люди я \(nameArtist) настрочил \"\(track.name)\"")
-   }
-   
-   override func perform(track: Track) {
-     print("Вечер в хату, добрые люди я \(nameArtist) спел песню \"\(track.name)\"")
-   }
+  override func write(track: Track) -> Track {
+    print("Вечер в хату, добрые люди я \(nameArtist) настрочил \"\(track.name)\"")
+    return addTo(track: track, nameArtist: nameArtist, country: country)
+  }
+  
+  override func perform(track: Track) {
+    print("Вечер в хату, добрые люди я \(nameArtist) спел песню \"\(track.name)\"")
+  }
 }
 
 
@@ -186,34 +204,33 @@ let firstRockArtist = RockSinger(nameArtist: "Freddie Mercury",
                                  genreOfMusic: .Rock,
                                  numberOfSubscribers: 900_000)
 firstRockArtist.alias = "Queen"
+
 firstRockArtist.write(track: Track(name: "Bohemian Rhapsody",
-                                   artist: firstRockArtist.nameArtist,
-                                   duration: 5.55,
-                                   country: firstRockArtist.country))
+                                   duration: 5.55))
+
+firstRockArtist.trackList
+
 firstRockArtist.perform(track: Track(name: "Bohemian Rhapsody",
-                                     artist: firstRockArtist.nameArtist,
-                                     duration: 5.55,
-                                     country: firstRockArtist.country))
+                                     duration: 5.55))
+
 firstRockArtist.breakTheGuitarInConcert()
 
 print("\t Поп артист:")
 let firstPopArtist = PopSinger(nameArtist: "Gordon Matthew Thomas Sumner",
                                country: "GBR",
                                genreOfMusic: .Pop)
+
 firstPopArtist.alias = "Sting"
 firstPopArtist.numberOfFlowers
+
 firstPopArtist.write(track: Track(name: "Shape of My Heart",
-                                  artist: firstPopArtist.nameArtist,
-                                  duration: 4.38,
-                                  country: firstPopArtist.country))
+                                  duration: 4.38))
+
 firstPopArtist.perform(track: Track(name: "Shape of My Heart",
-                                    artist: firstPopArtist.nameArtist,
-                                    duration: 4.38,
-                                    country: firstPopArtist.country))
+                                    duration: 4.38))
+
 firstPopArtist.singAnEncore(track: Track(name: "Shape of My Heart",
-                                         artist: firstPopArtist.nameArtist,
-                                         duration: 4.38,
-                                         country: firstPopArtist.country))
+                                         duration: 4.38))
 firstPopArtist.numberOfFlowers
 
 print("\t Шансон артист:")
@@ -222,14 +239,13 @@ let firstShansonArtist = ShansonSinger(nameArtist: "Трофимов, Серге
                                        genreOfMusic: .Shanson,
                                        isBlackBMW: true)
 firstShansonArtist.alias = "Трофим"
+
 firstShansonArtist.write(track: Track(name: "Московская Песня",
-                                      artist: firstShansonArtist.nameArtist,
-                                      duration: 3.05,
-                                      country: firstShansonArtist.country))
+                                      duration: 3.05))
+
 firstShansonArtist.perform(track: Track(name: "Московская Песня",
-                                        artist: firstShansonArtist.nameArtist,
-                                        duration: 3.05,
-                                        country: firstShansonArtist.country))
+                                        duration: 3.05))
+
 firstShansonArtist.giveConcert(inTheHall: "Дом Офицеров")
 
 

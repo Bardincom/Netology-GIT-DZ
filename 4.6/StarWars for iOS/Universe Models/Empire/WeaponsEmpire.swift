@@ -15,4 +15,5 @@ struct SuperLazer: Weapons {
   var damage: Int = 10000
   var rateOfFire: Int = 1
   var ammunition: Int = 2
+  
 }

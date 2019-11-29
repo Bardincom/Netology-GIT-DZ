@@ -8,6 +8,6 @@
 
 // перечисление фракции
 enum Fraction {
-    case jedi
-    case empare
+  case jedi
+  case empare
 }

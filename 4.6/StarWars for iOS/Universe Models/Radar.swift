@@ -9,92 +9,95 @@
 import Foundation
 
 protocol RadarObserver: AnyObject {
-    func detected(object: SpaceObject)
+  func detected(object: SpaceObject)
 }
 
 protocol Togglable {
-    mutating func toggle()
+  mutating func toggle()
 }
 
 class Radar: SpaceObject, Togglable {
+  var forseField: Int = 100
+  
+  
+  // MARK: - Constants
+  
+  private enum  Constants {
+    static let timeInterval: TimeInterval = 1
+  }
+  
+  private enum Status: Togglable {
+    case on
+    case off
     
-    // MARK: - Constants
-    
-    private enum  Constants {
-        static let timeInterval: TimeInterval = 1
+    mutating func toggle() {
+      switch self {
+        case .off:
+          self = .on
+        case .on:
+          self = .off
+      }
     }
-    
-    private enum Status: Togglable {
-        case on
-        case off
-        
-        mutating func toggle() {
-            switch self {
-            case .off:
-                self = .on
-            case .on:
-                self = .off
-            }
-        }
+  }
+  
+  // MARK: - Properties
+  
+  var coordinate: Point
+  var health: Int = 1
+  
+  weak var observer: RadarObserver?
+  weak var datasource: Displayable?
+  
+  private var timer: Timer?
+  private var status = Status.off {
+    didSet {
+      switch status {
+        case .on:
+          startTimer()
+        case .off:
+          stopTimer()
+      }
     }
-    
-    // MARK: - Properties
-    
-    var coordinate: Point
-    var health: Int = 1
-    
-    weak var observer: RadarObserver?
-    weak var datasource: Displayable?
-    
-    private var timer: Timer?
-    private var status = Status.off {
-        didSet {
-            switch status {
-            case .on:
-                startTimer()
-            case .off:
-                stopTimer()
-            }
-        }
+  }
+  
+  // MARK: Lifecycle
+  
+  init(coordinate: Point) {
+    self.coordinate = coordinate
+  }
+  
+  deinit {
+    print("Radar is dead")
+  }
+  
+  func toggle() {
+    status.toggle()
+  }
+  
+  private func startTimer() {
+    timer = Timer.scheduledTimer(timeInterval: Constants.timeInterval,
+                                 target: self,
+                                 selector: #selector(self.sendSignal),
+                                 userInfo: nil,
+                                 repeats: true)
+  }
+  
+  private func stopTimer() {
+    timer?.invalidate()
+    timer = nil
+  }
+  
+  @objc
+  private func sendSignal() {
+    let rect = Rect.generate()
+    print("Сканирую пространство \(rect)")
+    if let objects = datasource?.expose(for: rect), !objects.isEmpty {
+      print("Ага! Попался \(objects) координаты X - \(coordinate.x) Y - \(coordinate.y)")
+      if let starship = objects.first as? StarshipImp,
+      starship.fraction == .empare {
+        observer?.detected(object: starship)
+     
+      }
     }
-        
-    // MARK: Lifecycle
-    
-    init(coordinate: Point) {
-        self.coordinate = coordinate
-    }
-    
-    deinit {
-        print("Radar is dead")
-    }
-    
-    func toggle() {
-        status.toggle()
-    }
-    
-    private func startTimer() {
-        timer = Timer.scheduledTimer(timeInterval: Constants.timeInterval,
-                                          target: self,
-                                          selector: #selector(self.sendSignal),
-                                          userInfo: nil,
-                                          repeats: true)
-    }
-    
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
-        
-    @objc
-    private func sendSignal() {
-        let rect = Rect.generate()
-        print("Сканирую пространство \(rect)")
-        if let objects = datasource?.expose(for: rect), !objects.isEmpty {
-          print("Ага! Попался \(objects) координаты X - \(coordinate.x) Y - \(coordinate.y)")
-            if let starship = objects.first as? StarshipImp,
-            starship.fraction == .empare {
-                observer?.detected(object: starship)
-            }
-        }
-    }
+  }
 }

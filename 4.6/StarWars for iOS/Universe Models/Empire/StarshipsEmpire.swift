@@ -10,25 +10,27 @@ import Foundation
 // Звезда смерти корабль Империи
 
 class DeathStar: StarshipImp {
-        
-    // MARK: - Constants
-    
-    private enum Constants {
-        static let health = 1000
-    }
-
-    // MARK: - Lifecycle
-    
-    init(coordinate: Point) {
-        super.init(name: "Death Star",
-                   fraction: .empare,
-                   coordinate: coordinate,
-                   weapons: [SuperLazer()])
-        health = Constants.health
-    }
-    
-    deinit {
-        print("Люк, я твой отец!")
-    }
+  
+  // MARK: - Constants
+  
+  private enum Constants {
+    static let health = 1000
+    static let forseField = 300
+  }
+  
+  // MARK: - Lifecycle
+  
+  init(coordinate: Point) {
+    super.init(name: "Death Star",
+               fraction: .empare,
+               coordinate: coordinate,
+               weapons: [SuperLazer()])
+    health = Constants.health
+    forseField = Constants.forseField
+  }
+  
+  deinit {
+    print("Люк, я твой отец!")
+  }
 }
 

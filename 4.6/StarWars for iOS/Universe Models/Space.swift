@@ -96,7 +96,6 @@ extension Space: ShootHandler {
     
     //бъем силовое поле
     spaceObject.forseField -=  weapons.damage
-//    weapons.ammunition -= 1
     
     print("Количество патронов: \(weapons.ammunition)")
 

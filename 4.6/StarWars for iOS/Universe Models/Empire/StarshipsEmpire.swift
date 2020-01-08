@@ -34,3 +34,17 @@ class DeathStar: StarshipImp {
   }
 }
 
+
+// добавил расширение радар наблюдатель
+extension DeathStar: RadarObserver {
+ 
+  func detected(object: SpaceObject) {
+    do {
+      try fire(to: object.coordinate)
+    } catch WeaponsError.isEmpty {
+      print("Нет патронов!")
+    } catch {
+      print("Ошибка не известна")
+    }
+  }
+}

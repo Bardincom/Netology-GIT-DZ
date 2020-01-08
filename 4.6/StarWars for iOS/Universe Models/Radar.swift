@@ -23,7 +23,7 @@ class Radar: SpaceObject, Togglable {
   // MARK: - Constants
   
   private enum  Constants {
-    static let timeInterval: TimeInterval = 1
+    static let timeInterval: TimeInterval = 0.4
   }
   
   private enum Status: Togglable {
@@ -93,11 +93,14 @@ class Radar: SpaceObject, Togglable {
     print("Сканирую пространство \(rect)")
     if let objects = datasource?.expose(for: rect), !objects.isEmpty {
       print("Ага! Попался \(objects) координаты X - \(coordinate.x) Y - \(coordinate.y)")
+//     добаляю еще отслеживание Империи и Джедаев
       if let starship = objects.first as? StarshipImp,
-      starship.fraction == .empare {
+      starship.fraction == .jedi {
         observer?.detected(object: starship)
-     
+      } else if let starship = objects.first as? StarshipImp, starship.fraction == .empare {
+        observer?.detected(object: starship)
       }
+
     }
   }
 }

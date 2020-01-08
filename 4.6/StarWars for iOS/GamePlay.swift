@@ -35,6 +35,8 @@ class GamePlay {
     
     radar.datasource = space
     radar.observer = xWing
+//    добавил в скан звезду смерти
+    radar.observer =  deathStar
     radar.toggle()
     space.add(object: radar)
     
